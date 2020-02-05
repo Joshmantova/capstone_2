@@ -8,7 +8,6 @@ from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 from sklearn.decomposition import LatentDirichletAllocation
 from wordcloud import WordCloud
-from sklearn.preprocessing import normalize
 import nltk
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import RegexpTokenizer
