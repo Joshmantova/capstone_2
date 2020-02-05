@@ -23,13 +23,14 @@ from nltk.stem import SnowballStemmer
 import pyLDAvis
 import pyLDAvis.gensim
 
-
+# Reading in data
 df = pd.read_csv('../Datasets/df_all_linkedin.csv', index_col=0)
 df_co = pd.read_csv('../Datasets/df_linkedin_Colorado.csv', index_col=0)
 
 descriptions = df['Description'].values
 descriptions_co = df_co['Description'].values
 
+# Creating stop words
 stopWords = set(stopwords.words('english'))
 add_stopwords = {
     'join', 'work', 'team', 'future', 'digital', 'technology', 'access', 'leader', 'industry', 'history', 'innovation',
@@ -43,6 +44,7 @@ add_stopwords = {
 }
 stopWords = stopWords.union(add_stopwords)
 
+# Initializing punctuation remover and lemmatizer
 tokenize_remove_punct = RegexpTokenizer(r'\w+')
 lemma = WordNetLemmatizer()
 
@@ -81,6 +83,7 @@ def lemmatize_descriptions(lemmatizer, descriptions):
         cleaned_descriptions.append(' '.join(temp_list))
     return np.array(cleaned_descriptions)
 
+# Cleaning descriptions for both the whole dataset and CO only
 descriptions_no_sw_co = remove_stopwords(stopWords, descriptions_co)
 descriptions_no_sw_punct_co = remove_punctuation(tokenize_remove_punct, descriptions_no_sw_co)
 cleaned_descriptions_co = lemmatize_descriptions(lemma, descriptions_no_sw_punct_co)
@@ -89,28 +92,32 @@ descriptions_no_sw = remove_stopwords(stopWords, descriptions)
 descriptions_no_sw_punct = remove_punctuation(tokenize_remove_punct, descriptions_no_sw)
 cleaned_descriptions = lemmatize_descriptions(lemma, descriptions_no_sw_punct)
 
+# Vectorizing words creating both tf and tf-idf matrices
 vectorizer = CountVectorizer(stop_words=stopWords, min_df=.15, max_df=0.75, max_features=5000)
 tfidf_vectorizer = TfidfVectorizer(stop_words=stopWords, min_df=.15, max_df=0.75, max_features=5000)
 tfidf = tfidf_vectorizer.fit_transform(cleaned_descriptions).toarray()
 tf = vectorizer.fit_transform(cleaned_descriptions)
 
+# Initializing and fitting k-means model
 kmeans = KMeans(n_clusters=5, verbose=True, n_jobs=-1)
 kmeans.fit(tfidf)
 
+# Returning most representative words for each cluster
 sorted_centroids = []
 for cluster in kmeans.cluster_centers_:
     top_10 = np.argsort(cluster)[::-1]
     sorted_centroids.append(top_10[:10])
-
 
 for idx, c in enumerate(sorted_centroids): 
     print(f'\nCluster {idx}\n')
     for idx in c: 
         print(tfidf_vectorizer.get_feature_names()[idx]) 
 
+# Calculating model score for kmeans
 silhouette_score(tfidf, kmeans.labels_)
 kmeans.score(tfidf)
 
+# Initializing and running LDA model
 feature_names = vectorizer.get_feature_names()
 
 lda = LatentDirichletAllocation(n_components=4, 
@@ -119,14 +126,17 @@ lda = LatentDirichletAllocation(n_components=4,
 
 lda.fit(tf)
 
+# Displaying most representative words for each cluster of LDA
 def display_topics(model, feature_names, num_top_words):
     for topic_idx, topic in enumerate(model.components_):
         print('Topic %d:' % (topic_idx))
         print(' '.join([feature_names[i] for i in topic.argsort()[:-num_top_words - 1:-1]]))
         
-        
 num_top_words=10
 display_topics(lda, feature_names, num_top_words)
+
+# LDA in gensim
+# Processing text with gensim
 data_text = df[['Description']].copy()
 data_text['index'] = data_text.index
 documents = data_text
@@ -144,11 +154,15 @@ def preprocess(text):
 stemmer = SnowballStemmer('english')
 processed_docs = documents['Description'].map(preprocess)
 
+# Vectorizing text
 id2word = gensim.corpora.Dictionary(processed_docs)
 id2word.filter_extremes(no_below=80, no_above=.75, keep_n=5000)
 texts = processed_docs
 bow_corpus = [id2word.doc2bow(text) for text in texts]
 
+# LDA model
 lda_model = gensim.models.LdaMulticore(bow_corpus, num_topics=3, id2word=id2word, passes=10, random_state=0)
+
+# Visualizing LDA with PyLDAvis
 vis = pyLDAvis.gensim.prepare(lda_model, bow_corpus, id2word)
 vis

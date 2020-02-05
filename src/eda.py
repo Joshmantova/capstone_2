@@ -78,7 +78,7 @@ cleaned_descriptions(lemmatize_descriptions(lemma, descriptions_no_punct_sw))
 
 # Vectorizing cleaned descriptions and creating TF matrix
 vectorizer = CountVectorizer(stop_words='english')
-tf = vectorizer.fit_transform(descriptions_no_sw_punct)
+tf = vectorizer.fit_transform(cleaned_descriptions)
 
 # Calculating feature frequencies
 feature_names = vectorizer.get_feature_names()
@@ -88,13 +88,13 @@ feature_frequencies = np.sum(tf.toarray(), axis=0)
 order = np.argsort(feature_frequencies)[::-1]
 for o in order[:10]:
     print(feature_names[o], feature_frequencies[o])
-
+# Getting the most frequent words and their frequencies
 top_10_words = []
 top_10_word_freqs = []
 for o in order[:10]:
     top_10_words.append(feature_names[o])
     top_10_word_freqs.append(feature_frequencies[o])
-    
+# Plotting them    
 fig, ax = plt.subplots()
 ax.barh(top_10_words[::-1], top_10_word_freqs[::-1])
 ax.set_ylabel('Top 10 Words')
@@ -103,7 +103,6 @@ ax.set_title('Top 10 Words and Their Frequencies')
 plt.tight_layout()
 
 # Word cloud with only punctuation removed.
-
 no_punct_descriptions = remove_punctuation(tokenize_remove_punct, descriptions)
 flattened_descriptions = ''
 for description in no_punct_descriptions:
@@ -119,6 +118,7 @@ ax.imshow(wordcloud)
 plt.axis('off')
 plt.tight_layout()
 
+# Word cloud with cleaned descriptions
 flat_cleaned_descriptions = ' '
 for descrip in cleaned_descriptions:
     flat_cleaned_descriptions += (descrip + ' ')
@@ -132,6 +132,7 @@ ax.imshow(wordcloud_cleaned)
 plt.axis('off')
 plt.tight_layout()
 
+# Visualizing the data with PCA
 tfidf_vectorizer = TfidfVectorizer(stop_words=stopWords_full, max_features=50000)
 tfidf = tfidf_vectorizer.fit_transform(cleaned_descriptions).toarray()
 
