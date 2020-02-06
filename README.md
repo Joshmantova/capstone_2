@@ -9,13 +9,13 @@
 
 # Data cleaning pipeline:
 * Words that should not help differentiate the jobs from each other were identified (e.g. equal, disability)
-* * These were words that were included in just about every job
+    * These were words that were included in just about every job
 
 * Cleaning descriptions
-* * Remove punctuation using NLTK's RegexpTokenizer
-* * Remove stop words (including NLTK's default stop words and my identified stop words)
-* * Lemmatize each word using NLTK's WordNetLemmatizer
-* * * Reduces similar words (both semanticly and grammaticly related words) to a single word
+    * Remove punctuation using NLTK's RegexpTokenizer
+    * Remove stop words (including NLTK's default stop words and my identified stop words)
+    * Lemmatize each word using NLTK's WordNetLemmatizer
+        * Reduces similar words (both semanticly and grammaticly related words) to a single word
 
 ![](imgs/wordcloud_only_punct_removed.png)
 
