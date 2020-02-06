@@ -51,15 +51,22 @@
 
 ## Given this data, I changed my approach from trying to numerically figure out what the best number of clusters. Instead, I decided to run several models and choose the number of clusters and type of model that seems to yield the most useful clusters.
 
+## Most representative jobs in each of the 7 clusters in a k-means model
+K-means is a hard clustering technique that determines what documents most likely belong to each cluster. The following table represents words in the descriptions that best represent the cluster of jobs. In more techinical terms, these were the words that were closest to each of the 7 cluster centers in euclidean space.
 
-| Cluster 0 | Cluster 1 | Cluster 2 | Cluster 3 | Cluster 4 | Cluster 5 | Cluster 6 |
-|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
-| ancestry  | research  | learn     | product   | system    | system    | marketing |
-| record    | analysis  | machine   | model     | position  | software  | analytics |
-| million   | program   | model     | company   | education | engineer  | insight   |
-| applicable| project   | scientist | insight   | computer  | cloud     | model     |
-| look      | position  | ai        | learn     |demonstrate| service   | product   |
-| create    | support   | deep      | scientist | level     | product   | analysis  |
-| law       | skill     | aws       | analysis  | least     | design    | strategy  |
+| LDS jobs  |Research jobs|Machine learning jobs| Data analysis jobs | Senior level jobs |Software engineer jobs | Marketing jobs |
+|-----------|-------------|---------------------|--------------------|-------------------|-----------------------|----------------|
+| ancestry  | research    | learn               | product            | system            | system                | marketing      |
+| record    | analysis    | machine             | model              | position          | software              | analytics      |
+| million   | program     | model               | company            | education         | engineer              | insight        |
+| applicable| project     | scientist           | insight            | computer          | cloud                 | model          |
+| look      | position    | ai                  | learn              | demonstrate       | service               | product        |
+| create    | support     | deep                | scientist          | level             | product               | analysis       |
+| law       | skill       | aws                 | analysis           | least             | design                | strategy       |
 
-* I started looking for 3 or so clusters representing jobs that are heavy in machine learning, more research/data analysis positions, and database heavy jobs.
+* These jobs match fairly well with my hypothesized clusters, but there seem to be some random clusters that were difficult to classify as well.
+* I started looking for 3 or so clusters representing jobs that are heavy in machine learning, more research/data analysis positions, and database heavy jobs. The k-means model kept returning random clusters that didn't make much sense to me so I decided to model the data using latent dirichlet allocation - a soft clustering technique that allows descriptions to load on to multiple clusters and gives the probability that each document should be classified in each cluster.
+* Using the gensim and pyLDAvis libraries in python also allows for some great visualizations of LDA clustering
+
+Using 7 clusters
+![](imgs/7_clusters_lda.png)
