@@ -53,7 +53,7 @@
 
 
 | Cluster 0 | Cluster 1 | Cluster 2 | Cluster 3 | Cluster 4 | Cluster 5 | Cluster 6 |
-|-----------------------------------------------------------------------------------|
+|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
 | ancestry  | research  | learn     | product   | system    | system    | marketing |
 | record    | analysis  | machine   | model     | position  | software  | analytics |
 | million   | program   | model     | company   | education | engineer  | insight   |
