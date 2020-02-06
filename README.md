@@ -51,44 +51,15 @@
 
 ## Given this data, I changed my approach from trying to numerically figure out what the best number of clusters. Instead, I decided to run several models and choose the number of clusters and type of model that seems to yield the most useful clusters.
 
-K-Means Clustering:
-Cluster 0
 
-ancestry
-record
-million
-applicable
-look
-create
-law
-challenge
-change
-design
+| Cluster 0 | Cluster 1 | Cluster 2 | Cluster 3 | Cluster 4 | Cluster 5 | Cluster 6 |
+|-----------------------------------------------------------------------------------|
+| ancestry  | research  | learn     | product   | system    | system    | marketing |
+| record    | analysis  | machine   | model     | position  | software  | analytics |
+| million   | program   | model     | company   | education | engineer  | insight   |
+| applicable| project   | scientist | insight   | computer  | cloud     | model     |
+| look      | position  | ai        | learn     |demonstrate| service   | product   |
+| create    | support   | deep      | scientist | level     | product   | analysis  |
+| law       | skill     | aws       | analysis  | least     | design    | strategy  |
 
-Cluster 1
-
-product
-analytics
-model
-analysis
-insight
-skill
-company
-management
-marketing
-team
-
-Cluster 2
-
-learn
-machine
-system
-model
-research
-software
-scientist
-engineering
-program
-engineer
-
-Read more [here](notebooks/lda3.html)
+* I started looking for 3 or so clusters representing jobs that are heavy in machine learning, more research/data analysis positions, and database heavy jobs.
