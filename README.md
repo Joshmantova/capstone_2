@@ -68,5 +68,6 @@ K-means is a hard clustering technique that determines what documents most likel
 * I started looking for 3 or so clusters representing jobs that are heavy in machine learning, more research/data analysis positions, and database heavy jobs. The k-means model kept returning random clusters that didn't make much sense to me so I decided to model the data using latent dirichlet allocation - a soft clustering technique that allows descriptions to load on to multiple clusters and gives the probability that each document should be classified in each cluster.
 * Using the gensim and pyLDAvis libraries in python also allows for some great visualizations of LDA clustering
 
+## LDA Clustering
 Using 7 clusters
 ![](imgs/7_clusters_lda.png)
