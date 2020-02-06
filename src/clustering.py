@@ -92,106 +92,86 @@ def preprocess(text):
 
 if __name__ == '__main__':
 
-# Reading in data
-df = pd.read_csv('../Datasets/df_all_linkedin.csv', index_col=0)
-df_co = pd.read_csv('../Datasets/df_linkedin_Colorado.csv', index_col=0)
+    # Reading in data
+    df = pd.read_csv('../Datasets/df_all_linkedin.csv', index_col=0)
+    df_co = pd.read_csv('../Datasets/df_linkedin_Colorado.csv', index_col=0)
 
-descriptions = df['Description'].values
-descriptions_co = df_co['Description'].values
+    descriptions = df['Description'].values
+    descriptions_co = df_co['Description'].values
 
-# Creating stop words
-stopWords = set(stopwords.words('english'))
-add_stopwords = {
-    'join', 'work', 'team', 'future', 'digital', 'technology', 'access', 'leader', 'industry', 'history', 'innovation',
-    'year', 'customer', 'focused', 'leading', 'business', 'ability', 'country', 'employee', 'www', 'seeking',
-    'location', 'role', 'responsible', 'designing', 'code', 'ideal', 'candidate', 'also', 'duty', 'without', 'excellent',
-    'set', 'area', 'well', 'use', 'strong', 'self', 'help', 'diverse', 'every', 'day', 'equal', 'employment', 'opportunity',
-    'affirmative', 'action', 'employer', 'diversity', 'qualified', 'applicant', 'receive', 'consideration', 'regard',
-    'race', 'color', 'religion', 'sex', 'national', 'origin', 'status', 'age', 'sexual', 'orientation', 'gender',
-    'identity', 'disability', 'marital', 'family', 'medical', 'protected', 'veteran', 'reasonable', 'accomodation',
-    'protect', 'status', 'equal', 'discriminate', 'inclusive', 'diverse'
-}
-stopWords = stopWords.union(add_stopwords)
+    # Creating stop words
+    stopWords = set(stopwords.words('english'))
+    add_stopwords = {
+        'join', 'work', 'team', 'future', 'digital', 'technology', 'access', 'leader', 'industry', 'history', 'innovation',
+        'year', 'customer', 'focused', 'leading', 'business', 'ability', 'country', 'employee', 'www', 'seeking',
+        'location', 'role', 'responsible', 'designing', 'code', 'ideal', 'candidate', 'also', 'duty', 'without', 'excellent',
+        'set', 'area', 'well', 'use', 'strong', 'self', 'help', 'diverse', 'every', 'day', 'equal', 'employment', 'opportunity',
+        'affirmative', 'action', 'employer', 'diversity', 'qualified', 'applicant', 'receive', 'consideration', 'regard',
+        'race', 'color', 'religion', 'sex', 'national', 'origin', 'status', 'age', 'sexual', 'orientation', 'gender',
+        'identity', 'disability', 'marital', 'family', 'medical', 'protected', 'veteran', 'reasonable', 'accomodation',
+        'protect', 'status', 'equal', 'discriminate', 'inclusive', 'diverse'
+    }
+    stopWords = stopWords.union(add_stopwords)
 
-# Initializing punctuation remover and lemmatizer
-tokenize_remove_punct = RegexpTokenizer(r'\w+')
-lemma = WordNetLemmatizer()
+    # Initializing punctuation remover and lemmatizer
+    tokenize_remove_punct = RegexpTokenizer(r'\w+')
+    lemma = WordNetLemmatizer()
 
+    # Cleaning descriptions for both the whole dataset and CO only
+    cleaned_descriptions = clean_descriptions(stopWords, descriptions)
 
+    # descriptions_no_sw_co = remove_stopwords(stopWords, descriptions_co)
+    # descriptions_no_sw_punct_co = remove_punctuation(tokenize_remove_punct, descriptions_no_sw_co)
+    # cleaned_descriptions_co = lemmatize_descriptions(lemma, descriptions_no_sw_punct_co)
 
-# Cleaning descriptions for both the whole dataset and CO only
-cleaned_descriptions = clean_descriptions(stopWords, descriptions)
+    # Vectorizing words creating both tf and tf-idf matrices
+    vectorizer = CountVectorizer(stop_words=stopWords, min_df=.15, max_df=0.75, max_features=5000)
+    tfidf_vectorizer = TfidfVectorizer(stop_words=stopWords, min_df=.15, max_df=0.75, max_features=5000)
+    tfidf = tfidf_vectorizer.fit_transform(cleaned_descriptions).toarray()
+    tf = vectorizer.fit_transform(cleaned_descriptions)
 
-# descriptions_no_sw_co = remove_stopwords(stopWords, descriptions_co)
-# descriptions_no_sw_punct_co = remove_punctuation(tokenize_remove_punct, descriptions_no_sw_co)
-# cleaned_descriptions_co = lemmatize_descriptions(lemma, descriptions_no_sw_punct_co)
+    # Initializing and fitting k-means model
+    kmeans = KMeans(n_clusters=5, verbose=True, n_jobs=-1)
+    kmeans.fit(tfidf)
 
-# descriptions_no_sw = remove_stopwords(stopWords, descriptions)
-# descriptions_no_sw_punct = remove_punctuation(descriptions_no_sw)
-# cleaned_descriptions = lemmatize_descriptions(descriptions_no_sw_punct)
+    # Returning most representative words for each cluster
+    get_representative_words(tfidf_vectorizer, kmeans)
 
-# Vectorizing words creating both tf and tf-idf matrices
-vectorizer = CountVectorizer(stop_words=stopWords, min_df=.15, max_df=0.75, max_features=5000)
-tfidf_vectorizer = TfidfVectorizer(stop_words=stopWords, min_df=.15, max_df=0.75, max_features=5000)
-tfidf = tfidf_vectorizer.fit_transform(cleaned_descriptions).toarray()
-tf = vectorizer.fit_transform(cleaned_descriptions)
+    # Calculating model score for kmeans
+    silhouette_score(tfidf, kmeans.labels_)
+    kmeans.score(tfidf)
 
-# Initializing and fitting k-means model
-kmeans = KMeans(n_clusters=5, verbose=True, n_jobs=-1)
-kmeans.fit(tfidf)
+    # Initializing and running LDA model
+    feature_names = vectorizer.get_feature_names()
 
-# Returning most representative words for each cluster
+    lda = LatentDirichletAllocation(n_components=4, 
+                                    max_iter=10, learning_method='online', 
+                                    random_state=0, verbose=True, n_jobs=-1)
 
+    lda.fit(tf)
 
-get_representative_words(tfidf_vectorizer, kmeans)
-# sorted_centroids = []
-# for cluster in kmeans.cluster_centers_:
-#     top_10 = np.argsort(cluster)[::-1]
-#     sorted_centroids.append(top_10[:10])
+    # Displaying most representative words for each cluster of LDA
+    num_top_words=10
+    display_topics(lda, feature_names, num_top_words)
 
-# for idx, c in enumerate(sorted_centroids): 
-#     print(f'\nCluster {idx}\n')
-#     for idx in c: 
-#         print(tfidf_vectorizer.get_feature_names()[idx]) 
+    # LDA in gensim
+    # Processing text with gensim
+    data_text = df[['Description']].copy()
+    data_text['index'] = data_text.index
+    documents = data_text
 
-# Calculating model score for kmeans
-silhouette_score(tfidf, kmeans.labels_)
-kmeans.score(tfidf)
+    stemmer = SnowballStemmer('english')
+    processed_docs = documents['Description'].map(preprocess)
 
-# Initializing and running LDA model
-feature_names = vectorizer.get_feature_names()
+    # Vectorizing text in gensim
+    id2word = gensim.corpora.Dictionary(processed_docs)
+    id2word.filter_extremes(no_below=80, no_above=.75, keep_n=5000)
+    texts = processed_docs
+    bow_corpus = [id2word.doc2bow(text) for text in texts]
 
-lda = LatentDirichletAllocation(n_components=4, 
-                                max_iter=10, learning_method='online', 
-                                random_state=0, verbose=True, n_jobs=-1)
+    # LDA model
+    lda_model = gensim.models.LdaMulticore(bow_corpus, num_topics=3, id2word=id2word, passes=10, random_state=0)
 
-lda.fit(tf)
-
-# Displaying most representative words for each cluster of LDA
-
-        
-num_top_words=10
-display_topics(lda, feature_names, num_top_words)
-
-# LDA in gensim
-# Processing text with gensim
-data_text = df[['Description']].copy()
-data_text['index'] = data_text.index
-documents = data_text
-
-
-stemmer = SnowballStemmer('english')
-processed_docs = documents['Description'].map(preprocess)
-
-# Vectorizing text
-id2word = gensim.corpora.Dictionary(processed_docs)
-id2word.filter_extremes(no_below=80, no_above=.75, keep_n=5000)
-texts = processed_docs
-bow_corpus = [id2word.doc2bow(text) for text in texts]
-
-# LDA model
-lda_model = gensim.models.LdaMulticore(bow_corpus, num_topics=3, id2word=id2word, passes=10, random_state=0)
-
-# Visualizing LDA with PyLDAvis
-vis = pyLDAvis.gensim.prepare(lda_model, bow_corpus, id2word)
-pyLDAvis.show(vis)
+    # Visualizing LDA with PyLDAvis
+    vis = pyLDAvis.gensim.prepare(lda_model, bow_corpus, id2word)
+    pyLDAvis.show(vis)
