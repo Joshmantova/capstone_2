@@ -91,4 +91,4 @@ engineering
 program
 engineer
 
-Read more [here](../notebooks/lda3.html)
+Read more [here](notebooks/lda3.html)
