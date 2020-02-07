@@ -6,6 +6,79 @@
 ## Using clustering algorithms and natural langauge processing, we can answer this question
 
 # The dataset:
+Job information was scraped from Linkedin from CA, CO, FL, NY, and UT using selenium and beautiful soup.
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Job_Title</th>
+      <th>Company</th>
+      <th>Location</th>
+      <th>Number_of_Applicants</th>
+      <th>Description</th>
+      <th>Length_of_Description</th>
+      <th>Senior</th>
+      <th>Junior</th>
+      <th>Senior_Junior_or_not</th>
+      <th>num_applicants</th>
+      <th>State</th>
+    </tr>
+    <tr>
+      <th>Unnamed: 0</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Data Acquisition Developer</td>
+      <td>ABB</td>
+      <td>Broomfield, CO, US</td>
+      <td>Be among the first 25 applicants</td>
+      <td>Join ABB and work in a team that is dedicated ...</td>
+      <td>7321</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+      <td>20</td>
+      <td>CO</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+
+```
+
 
 # Data cleaning pipeline:
 ![](imgs/capstone_2_flowchart.png)
@@ -64,10 +137,27 @@ K-means is a hard clustering technique that determines what documents most likel
 | create    | support     | deep                | scientist          | level             | product               | analysis       |
 | law       | skill       | aws                 | analysis           | least             | design                | strategy       |
 
+
+
 * These jobs match fairly well with my hypothesized clusters, but there seem to be some random clusters that were difficult to classify as well.
 * I started looking for 3 or so clusters representing jobs that are heavy in machine learning, more research/data analysis positions, and database heavy jobs. The k-means model kept returning random clusters that didn't make much sense to me so I decided to model the data using latent dirichlet allocation - a soft clustering technique that allows descriptions to load on to multiple clusters and gives the probability that each document should be classified in each cluster.
 * Using the gensim and pyLDAvis libraries in python also allows for some great visualizations of LDA clustering
 
 ## LDA Clustering
-Using 7 clusters
+
 ![](imgs/7_clusters_lda.png)
+Using 7 clusters yielded topics that were almost all on top of each other. Additionally, the topics didn't seem to have clearly defined terms. Perhaps only using three clusters would be better.
+
+Using 3 clusters produced topics that were farther apart but the words that represented the topics didn't seem to have a very cohesive connection.
+
+![](imgs/lda_3_cluster1.png)
+
+![](imgs/lda_3_cluster2.png)
+
+![](imgs/lda_3_cluster3.png)
+
+# Conclusion
+* NLP is hard and stopword modification can help produce better clustering
+* K-means clustering produced better clusters than did LDA
+* Using clustering scores can be helpful but making sense out of this data was essential
+* Python can produce some amazing visuals with not much code
