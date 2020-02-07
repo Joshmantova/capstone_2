@@ -1,12 +1,14 @@
-# capstone_2
+
+# Background
 ![](imgs/Top-Data-Science-Jobs.png)
 
-# There are several specific types of data science jobs
-## Can these types be depicted from the descriptions?
-## Using clustering algorithms and natural langauge processing, we can answer this question
+Due to the ill-defined nature of term data science, there are several different flavors of data science jobs such as data scientist, machine learning engineer, and data analyst. All three of these types of jobs overlap substantially, but utilize different tools and may attract different kinds of people.
 
-# The dataset:
-Job information was scraped from Linkedin from CA, CO, FL, NY, and UT using selenium and beautiful soup.
+* Main question of interest: Can these flavors of data scientist jobs be depicted from their descriptions?
+    * Using clustering algorithms and natural language processing, this question can be addressed
+
+# The Data:
+Using selenium and beautiful soup, two popular python packages for web scraping and web automation, 3150 jobs were scraped from Linkedin.com. The search looked at jobs that resulted from looking up 'Data Science' and searched 6 states: CA, CO, FL, NY, and UT. This search term yielded the largest number of jobs from the search terms tested. Here is an example row of the data:
 
 <table border="1" class="dataframe">
   <thead>
@@ -103,17 +105,16 @@ K-means is a hard clustering technique that determines what documents most likel
 | record    | analysis    | machine             | model              | position          | software              | analytics      |
 | million   | program     | model               | company            | education         | engineer              | insight        |
 | applicable| project     | scientist           | insight            | computer          | cloud                 | model          |
-| look      | position    | ai                  | learn              | demonstrate       | service               | product        |
+| look      | position    | ai                  | statistical        | demonstrate       | service               | product        |
 | create    | support     | deep                | scientist          | level             | product               | analysis       |
 | law       | skill       | aws                 | analysis           | least             | design                | strategy       |
-
-
 
 * These jobs match fairly well with my hypothesized clusters, but there seem to be some random clusters that were difficult to classify as well.
 * I started looking for 3 or so clusters representing jobs that are heavy in machine learning, more research/data analysis positions, and database heavy jobs. The k-means model kept returning random clusters that didn't make much sense to me so I decided to model the data using latent dirichlet allocation - a soft clustering technique that allows descriptions to load on to multiple clusters and gives the probability that each document should be classified in each cluster.
 * Using the gensim and pyLDAvis libraries in python also allows for some great visualizations of LDA clustering
 
 ## LDA Clustering
+In reality, each of these jobs are part one topic and part another topic; jobs rarely are clearly defined as one type of job. A soft clustering technique such as LDA may be more appropriate for this type of data.
 
 ![](imgs/7_clusters_lda.png)
 Using 7 clusters yielded topics that were almost all on top of each other. Additionally, the topics didn't seem to have clearly defined terms. Perhaps only using three clusters would be better.
@@ -128,6 +129,8 @@ Using 3 clusters produced topics that were farther apart but the words that repr
 
 # Conclusion
 * NLP is hard and stopword modification can help produce better clustering
+    * Feature engineering is the name of the game
 * K-means clustering produced better clusters than did LDA
 * Using clustering scores can be helpful but making sense out of this data was essential
 * Python can produce some amazing visuals with not much code
+* Word stemming rather than - or in addition to - lemmatization may be more appropriate
