@@ -19,7 +19,6 @@ Job information was scraped from Linkedin from CA, CO, FL, NY, and UT using sele
       <th>Description</th>
     </tr>
     <tr>
-      <th>Unnamed: 0</th>
       <th></th>
       <th></th>
       <th></th>
@@ -29,7 +28,6 @@ Job information was scraped from Linkedin from CA, CO, FL, NY, and UT using sele
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
       <td>Data Acquisition Developer</td>
       <td>ABB</td>
       <td>Broomfield, CO, US</td>
