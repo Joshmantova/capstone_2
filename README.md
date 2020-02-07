@@ -17,21 +17,9 @@ Job information was scraped from Linkedin from CA, CO, FL, NY, and UT using sele
       <th>Location</th>
       <th>Number_of_Applicants</th>
       <th>Description</th>
-      <th>Length_of_Description</th>
-      <th>Senior</th>
-      <th>Junior</th>
-      <th>Senior_Junior_or_not</th>
-      <th>num_applicants</th>
-      <th>State</th>
     </tr>
     <tr>
       <th>Unnamed: 0</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
       <th></th>
       <th></th>
       <th></th>
@@ -47,18 +35,17 @@ Job information was scraped from Linkedin from CA, CO, FL, NY, and UT using sele
       <td>Broomfield, CO, US</td>
       <td>Be among the first 25 applicants</td>
       <td>Join ABB and work in a team that is dedicated ...</td>
-      <td>7321</td>
-      <td>0</td>
-      <td>0</td>
-      <td>2</td>
-      <td>20</td>
-      <td>CO</td>
     </tr>
   </tbody>
 </table>
 </div>
 
 
+
+
+```python
+
+```
 
 
 ```python
