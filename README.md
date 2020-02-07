@@ -11,7 +11,6 @@ Job information was scraped from Linkedin from CA, CO, FL, NY, and UT using sele
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
-      <th></th>
       <th>Job_Title</th>
       <th>Company</th>
       <th>Location</th>
