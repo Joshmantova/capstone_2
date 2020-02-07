@@ -131,6 +131,18 @@ Using 3 clusters produced topics that were farther apart but the words that repr
 * NLP is hard and stopword modification can help produce better clustering
     * Feature engineering is the name of the game
 * K-means clustering produced better clusters than did LDA
+  * LDS jobs
+  * Research jobs
+  * Machine learning jobs
+  * Data analysis jobs
+  * Senior level jobs
+  * Software engineer jobs
+  * Marketing jobs
 * Using clustering scores can be helpful but making sense out of this data was essential
 * Python can produce some amazing visuals with not much code
 * Word stemming rather than - or in addition to - lemmatization may be more appropriate
+
+* Limitations and future directions
+  * Only searched for data science
+  * Would like to isolate skills and cluster based on skills only
+    * Much of the descriptions are about the company; not about the job
