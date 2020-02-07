@@ -146,3 +146,4 @@ Using 3 clusters produced topics that were farther apart but the words that repr
   * Only searched for data science
   * Would like to isolate skills and cluster based on skills only
     * Much of the descriptions are about the company; not about the job
+  * Would like to cluster jobs by state
