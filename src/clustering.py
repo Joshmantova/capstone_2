@@ -23,7 +23,6 @@ from nltk.stem import SnowballStemmer
 import pyLDAvis
 import pyLDAvis.gensim
 
-
 def remove_stopwords(stopWords, descriptions):
     cleaned_descriptions = []
     for description in descriptions:
